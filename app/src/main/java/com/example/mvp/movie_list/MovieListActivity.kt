@@ -1,20 +1,22 @@
 package com.example.mvp.movie_list
 
 import Movie
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.mvp.R
 import com.example.mvp.adapter.MoviesAdapter
+import com.example.mvp.movie_filter.MovieFilterActivity
+import com.example.mvp.utils.Constants.ACTION_MOVIE_FILTER
+import com.example.mvp.utils.Constants.KEY_RELEASE_FROM
+import com.example.mvp.utils.Constants.KEY_RELEASE_TO
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MovieListActivity : AppCompatActivity(), MovieListContract.View {
+class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmptyView {
 
     private var movieListPresenter: MovieListPresenter? = null
 
@@ -22,11 +24,15 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View {
     private var moviesAdapter: MoviesAdapter? = null
 //    private var pageNo = 1
 
+    private var fromReleaseFilter = "";
+    private var toReleaseFilter = "";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar!!.title = getString(R.string.most_popular_movies)
         initUI()
+        setListeners()
         movieListPresenter = MovieListPresenter(this)
         movieListPresenter?.requestDataFromServer()
     }
@@ -38,9 +44,29 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View {
             layoutManager = mLayoutManager
             rv_movie_list.adapter = moviesAdapter
         }
-
     }
 
+    private fun setListeners(){
+        fab_filter.setOnClickListener {
+            val intent = Intent(this, MovieFilterActivity::class.java)
+            intent.putExtra(KEY_RELEASE_FROM, fromReleaseFilter)
+            intent.putExtra(KEY_RELEASE_TO, toReleaseFilter)
+            startActivityForResult(intent, ACTION_MOVIE_FILTER)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ACTION_MOVIE_FILTER) {
+            if (resultCode == RESULT_OK) {
+                // Checking if there is any data to filter
+                fromReleaseFilter = data?.getStringExtra(KEY_RELEASE_FROM)!!
+                toReleaseFilter = data?.getStringExtra(KEY_RELEASE_TO)!!
+                moviesAdapter?.setFilterParameter(fromReleaseFilter, toReleaseFilter)
+                moviesAdapter?.filter?.filter("")
+            }
+        }
+    }
 
     override fun showProgress() {
         pb_loading.visibility = View.VISIBLE
@@ -68,5 +94,15 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View {
 
     companion object {
         private const val TAG = "MovieListActivity"
+    }
+
+    override fun showEmptyView() {
+        rv_movie_list.visibility = View.GONE
+        tv_empty_view.visibility = View.VISIBLE
+    }
+
+    override fun hideEmptyView() {
+        rv_movie_list.visibility = View.VISIBLE
+        tv_empty_view.visibility = View.GONE
     }
 }
