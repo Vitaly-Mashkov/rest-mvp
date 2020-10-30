@@ -1,6 +1,5 @@
 package com.example.mvp.adapter
 
-import Movie
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.mvp.R
+import com.example.mvp.model.Movie
 import com.example.mvp.movie_list.MovieListActivity
 import com.example.mvp.network.ApiClient
 import java.text.DateFormat
@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Suppress("UNCHECKED_CAST")
 class MoviesAdapter(private val movieListActivity: MovieListActivity,
                     private var movieList: List<Movie?>) :
         RecyclerView.Adapter<MoviesAdapter.MyViewHolder>(), Filterable {
@@ -65,6 +66,8 @@ class MoviesAdapter(private val movieListActivity: MovieListActivity,
                             .error(R.drawable.ic_place_holder)
             )
             .into(holder.ivMovieThumb)
+
+        holder.itemView.setOnClickListener { movieListActivity.onItemClick(position) }
     }
 
     override fun getItemCount() =  movieList.size
@@ -105,7 +108,7 @@ class MoviesAdapter(private val movieListActivity: MovieListActivity,
         }
     }
 
-    private fun getFilteredResults(fromDate: String?, toDate: String?): List<Movie?> {
+    private fun getFilteredResults(fromDate: String, toDate: String): List<Movie?> {
         val results: MutableList<Movie> = ArrayList()
         for (item in movieList) {
             if (item?.release_date?.isEmpty()!!) {

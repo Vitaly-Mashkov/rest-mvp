@@ -1,6 +1,6 @@
 package com.example.mvp.movie_list
 
-import Movie
+import com.example.mvp.model.Movie
 
 class MovieListPresenter(private var movieListView: MovieListContract.View?) : MovieListContract.Presenter,
     MovieListContract.Model.OnFinishedListener {

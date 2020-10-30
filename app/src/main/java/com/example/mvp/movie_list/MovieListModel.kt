@@ -1,7 +1,6 @@
 package com.example.mvp.movie_list
 
-import MovieListResponse
-import android.util.Log
+import com.example.mvp.model.MovieListResponse
 import com.example.mvp.network.ApiClient
 import com.example.mvp.network.ApiInterface
 import retrofit2.Call
@@ -19,8 +18,8 @@ class MovieListModel : MovieListContract.Model {
 
         call.enqueue(object : Callback<MovieListResponse> {
             override fun onResponse(
-                call: Call<MovieListResponse?>,
-                response: Response<MovieListResponse>
+                    call: Call<MovieListResponse?>,
+                    response: Response<MovieListResponse>
             ) {
                 val movies = response.body()?.results
                 onFinishedListener?.onFinished(movies)

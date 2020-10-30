@@ -1,6 +1,5 @@
 package com.example.mvp.movie_list
 
-import Movie
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mvp.R
 import com.example.mvp.adapter.MoviesAdapter
+import com.example.mvp.model.Movie
+import com.example.mvp.movie_details.MovieDetailsActivity
 import com.example.mvp.movie_filter.MovieFilterActivity
 import com.example.mvp.utils.Constants.ACTION_MOVIE_FILTER
+import com.example.mvp.utils.Constants.KEY_MOVIE_ID
 import com.example.mvp.utils.Constants.KEY_RELEASE_FROM
 import com.example.mvp.utils.Constants.KEY_RELEASE_TO
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmptyView {
+class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmptyView, MovieItemClickListener {
 
     private var movieListPresenter: MovieListPresenter? = null
 
@@ -24,8 +26,8 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
     private var moviesAdapter: MoviesAdapter? = null
 //    private var pageNo = 1
 
-    private var fromReleaseFilter = "";
-    private var toReleaseFilter = "";
+    private var fromReleaseFilter = ""
+    private var toReleaseFilter = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +61,8 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ACTION_MOVIE_FILTER) {
             if (resultCode == RESULT_OK) {
-                // Checking if there is any data to filter
                 fromReleaseFilter = data?.getStringExtra(KEY_RELEASE_FROM)!!
-                toReleaseFilter = data?.getStringExtra(KEY_RELEASE_TO)!!
+                toReleaseFilter = data.getStringExtra(KEY_RELEASE_TO)!!
                 moviesAdapter?.setFilterParameter(fromReleaseFilter, toReleaseFilter)
                 moviesAdapter?.filter?.filter("")
             }
@@ -104,5 +105,11 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
     override fun hideEmptyView() {
         rv_movie_list.visibility = View.VISIBLE
         tv_empty_view.visibility = View.GONE
+    }
+
+    override fun onItemClick(position: Int) {
+        val intent = Intent(this, MovieDetailsActivity::class.java)
+        intent.putExtra(KEY_MOVIE_ID, moviesList[position].id)
+        startActivity(intent)
     }
 }

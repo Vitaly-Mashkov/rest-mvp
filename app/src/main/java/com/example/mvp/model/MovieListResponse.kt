@@ -1,3 +1,5 @@
+package com.example.mvp.model
+
 import com.google.gson.annotations.SerializedName
 
 data class MovieListResponse (

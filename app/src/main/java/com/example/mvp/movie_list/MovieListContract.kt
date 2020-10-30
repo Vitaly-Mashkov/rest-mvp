@@ -1,6 +1,6 @@
 package com.example.mvp.movie_list
 
-import Movie
+import com.example.mvp.model.Movie
 
 interface MovieListContract {
     interface Model {

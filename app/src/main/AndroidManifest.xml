@@ -18,6 +18,8 @@
         </activity>
 
         <activity android:name=".movie_filter.MovieFilterActivity"/>
+        <activity android:name=".movie_details.MovieDetailsActivity"
+            android:theme="@style/Theme.MVP.NoActionBar"/>
     </application>
 
 </manifest>

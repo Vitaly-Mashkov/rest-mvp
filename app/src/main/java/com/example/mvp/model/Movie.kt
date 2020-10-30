@@ -1,3 +1,5 @@
+package com.example.mvp.model
+
 import com.google.gson.annotations.SerializedName
 
 data class Movie (
@@ -9,10 +11,14 @@ data class Movie (
 	@SerializedName("id") val id : Int,
 	@SerializedName("adult") val adult : Boolean,
 	@SerializedName("backdrop_path") val backdrop_path : String,
+	@SerializedName("credits") val credits: Credits,
 	@SerializedName("original_language") val original_language : String,
 	@SerializedName("original_title") val original_title : String,
 	@SerializedName("genre_ids") val genre_ids : List<Int>,
 	@SerializedName("title") val title : String,
+	@SerializedName("tagline") val tagline : String,
+	@SerializedName("homepage") val homepage : String,
+	@SerializedName("runtime") val runtime : String,
 	@SerializedName("vote_average") val vote_average : Double,
 	@SerializedName("overview") val overview : String,
 	@SerializedName("release_date") val release_date : String
