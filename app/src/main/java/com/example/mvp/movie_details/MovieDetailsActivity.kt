@@ -17,7 +17,6 @@ import com.example.mvp.model.Movie
 import com.example.mvp.network.ApiClient
 import com.example.mvp.utils.Constants.KEY_MOVIE_ID
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_movie_details.*
 import kotlinx.android.synthetic.main.content_movie_details.*
@@ -31,8 +30,10 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_details)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+        }
         initCollapsingToolbar()
         initUI()
         val mIntent = intent
@@ -42,19 +43,16 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.View {
     }
 
     private fun initUI() {
-
         castAdapter = CastAdapter(this, castList)
         rv_cast.adapter = castAdapter
     }
 
 
     private fun initCollapsingToolbar() {
-        val collapsingToolbar = findViewById<CollapsingToolbarLayout>(R.id.collapsing_toolbar)
-        collapsingToolbar.title = " "
+        collapsing_toolbar.title = " "
         val appBarLayout = findViewById<AppBarLayout>(R.id.appbar)
         appBarLayout.setExpanded(true)
 
-        // hiding & showing the title when toolbar expanded & collapsed
         appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = false
             var scrollRange = -1
@@ -63,10 +61,10 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.View {
                     scrollRange = appBarLayout.totalScrollRange
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.title = movieName
+                    collapsing_toolbar.title = movieName
                     isShow = true
                 } else if (isShow) {
-                    collapsingToolbar.title = " "
+                    collapsing_toolbar.title = " "
                     isShow = false
                 }
             }
@@ -108,7 +106,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.View {
                 .into(iv_backdrop)
         castList.clear()
         castList.addAll(movie.credits.cast)
-        castAdapter!!.notifyDataSetChanged()
+        castAdapter?.notifyDataSetChanged()
         tv_tagline_value.text = movie.tagline
         tv_homepage_value.text = movie.homepage
         tv_runtime_value.text = movie.runtime

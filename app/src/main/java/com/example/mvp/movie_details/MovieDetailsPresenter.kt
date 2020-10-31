@@ -9,24 +9,18 @@ class MovieDetailsPresenter(private var movieDetailView: MovieDetailsContract.Vi
     }
 
     override fun requestMovieData(movieId: Int) {
-        if (movieDetailView != null) {
-            movieDetailView!!.showProgress()
-        }
+        movieDetailView?.showProgress()
         movieDetailsModel.getMovieDetails(this, movieId)
     }
 
     override fun onFinished(movie: Movie) {
-        if (movieDetailView != null) {
-            movieDetailView!!.hideProgress()
-        }
-        movieDetailView!!.setDataToViews(movie)
+        movieDetailView?.hideProgress()
+        movieDetailView?.setDataToViews(movie)
     }
 
     override fun onFailure(t: Throwable) {
-        if (movieDetailView != null) {
-            movieDetailView!!.hideProgress()
-        }
-        movieDetailView!!.onResponseFailure(t)
+        movieDetailView!!.hideProgress()
+        movieDetailView?.onResponseFailure(t)
     }
 
     init {

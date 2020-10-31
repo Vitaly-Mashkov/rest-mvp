@@ -5,5 +5,5 @@ object Constants {
     const val CREDITS = "credits"
     const val ACTION_MOVIE_FILTER = 999
     const val KEY_RELEASE_FROM = "release_from"
-    const val KEY_RELEASE_TO = "relase_to"
+    const val KEY_RELEASE_TO = "release_to"
 }

@@ -15,15 +15,13 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.example.mvp.R
 import com.example.mvp.model.Cast
 import com.example.mvp.network.ApiClient
-import com.bumptech.glide.request.target.Target
 
 
-class CastAdapter(mContext: Context, castList: List<Cast>) : RecyclerView.Adapter<CastAdapter.MyViewHolder>() {
-    private val mContext: Context
-    private val castList: List<Cast>
+class CastAdapter(private val mContext: Context, private val castList: List<Cast>) : RecyclerView.Adapter<CastAdapter.MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.cast_card, parent, false)
@@ -33,7 +31,7 @@ class CastAdapter(mContext: Context, castList: List<Cast>) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val cast: Cast = castList[position]
         holder.tvCharacter.text = cast.character
-        holder.tvName.setText(cast.name)
+        holder.tvName.text = cast.name
 
         // loading cast profile pic using Glide library
         Glide.with(mContext)
@@ -58,21 +56,10 @@ class CastAdapter(mContext: Context, castList: List<Cast>) : RecyclerView.Adapte
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tvCharacter: TextView
-        var tvName: TextView
-        var ivProfilePic: ImageView
-        var pbLoadProfile: ProgressBar
-
-        init {
-            tvCharacter = itemView.findViewById(R.id.tv_character)
-            tvName = itemView.findViewById(R.id.tv_name)
-            ivProfilePic = itemView.findViewById(R.id.iv_profile_pic)
-            pbLoadProfile = itemView.findViewById(R.id.pb_load_profile)
-        }
+        var tvCharacter: TextView = itemView.findViewById(R.id.tv_character)
+        var tvName: TextView = itemView.findViewById(R.id.tv_name)
+        var ivProfilePic: ImageView = itemView.findViewById(R.id.iv_profile_pic)
+        var pbLoadProfile: ProgressBar = itemView.findViewById(R.id.pb_load_profile)
     }
 
-    init {
-        this.mContext = mContext
-        this.castList = castList
-    }
 }
