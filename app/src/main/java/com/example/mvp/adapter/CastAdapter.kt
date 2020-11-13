@@ -33,7 +33,6 @@ class CastAdapter(private val mContext: Context, private val castList: List<Cast
         holder.tvCharacter.text = cast.character
         holder.tvName.text = cast.name
 
-        // loading cast profile pic using Glide library
         Glide.with(mContext)
                 .load(ApiClient.IMAGE_BASE_URL + cast.profilePath)
                 .listener(object : RequestListener<Drawable?> {

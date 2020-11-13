@@ -21,6 +21,7 @@ interface MovieListContract {
 
     interface Presenter {
         fun onDestroy()
+        fun getMoreData(pageNo : Int)
         fun requestDataFromServer()
     }
 }

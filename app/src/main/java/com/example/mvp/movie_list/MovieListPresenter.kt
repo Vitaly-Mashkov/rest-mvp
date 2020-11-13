@@ -11,6 +11,11 @@ class MovieListPresenter(private var movieListView: MovieListContract.View?) : M
         movieListView = null
     }
 
+    override fun getMoreData(pageNo: Int) {
+        movieListView!!.showProgress()
+        movieListModel.getMovieList(this, pageNo)
+    }
+
     override fun requestDataFromServer() {
         movieListView!!.showProgress()
         movieListModel.getMovieList(this, 1)
