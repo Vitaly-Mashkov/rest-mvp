@@ -19,10 +19,10 @@ import com.example.mvp.utils.Constants.KEY_RELEASE_FROM
 import com.example.mvp.utils.Constants.KEY_RELEASE_TO
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmptyView, MovieItemClickListener {
+class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmptyView,
+    MovieItemClickListener {
 
-    private var movieListPresenter: MovieListPresenter? = null
-
+    private val movieListPresenter = MovieListPresenter(this)
     private val moviesList = mutableListOf<Movie>()
     private var moviesAdapter: MoviesAdapter? = null
 
@@ -30,11 +30,12 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
 
     private var fromReleaseFilter = ""
     private var toReleaseFilter = ""
+
     //load more
     private var previousTotal = 0
     private var visibleItemCount = 0
     private var totalItemCount = 0
-    private  var firstVisibleItem = 0
+    private var firstVisibleItem = 0
     private var loading = true
     private val visibleThreshold = 5
 
@@ -46,8 +47,7 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
         supportActionBar!!.title = getString(R.string.most_popular_movies)
         initUI()
         setListeners()
-        movieListPresenter = MovieListPresenter(this)
-        movieListPresenter?.requestDataFromServer()
+        movieListPresenter.requestDataFromServer()
     }
 
     private fun initUI() {
@@ -59,15 +59,14 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
         }
     }
 
-    private fun setListeners(){
-
+    private fun setListeners() {
         rv_movie_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 visibleItemCount = rv_movie_list.childCount
                 totalItemCount = mLayoutManager.itemCount
-                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition()
 
                 // Handling the infinite scroll
                 if (loading) {
@@ -77,27 +76,26 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
                     }
                 }
                 if (!loading && (totalItemCount - visibleItemCount)
-                        <= (firstVisibleItem + visibleThreshold)) {
+                    <= (firstVisibleItem + visibleThreshold)
+                ) {
                     movieListPresenter?.getMoreData(pageNo)
-                    loading = true;
+                    loading = true
                 }
 
                 // Hide and show Filter button
                 if (dy > 0 && fab_filter.visibility == View.VISIBLE) {
-                    fab_filter.hide();
+                    fab_filter.hide()
                 } else if (dy < 0 && fab_filter.visibility != View.VISIBLE) {
-                    fab_filter.show();
+                    fab_filter.show()
                 }
             }
         })
-
         fab_filter.setOnClickListener {
             val intent = Intent(this, MovieFilterActivity::class.java)
             intent.putExtra(KEY_RELEASE_FROM, fromReleaseFilter)
             intent.putExtra(KEY_RELEASE_TO, toReleaseFilter)
             startActivityForResult(intent, ACTION_MOVIE_FILTER)
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -133,7 +131,7 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
 
     override fun onDestroy() {
         super.onDestroy()
-        movieListPresenter?.onDestroy()
+        movieListPresenter.onDestroy()
     }
 
     companion object {

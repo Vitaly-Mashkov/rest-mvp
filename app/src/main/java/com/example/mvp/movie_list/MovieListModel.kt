@@ -18,8 +18,8 @@ class MovieListModel : MovieListContract.Model {
 
         call.enqueue(object : Callback<MovieListResponse> {
             override fun onResponse(
-                    call: Call<MovieListResponse?>,
-                    response: Response<MovieListResponse>
+                call: Call<MovieListResponse?>,
+                response: Response<MovieListResponse>
             ) {
                 val movies = response.body()?.results
                 onFinishedListener?.onFinished(movies)
