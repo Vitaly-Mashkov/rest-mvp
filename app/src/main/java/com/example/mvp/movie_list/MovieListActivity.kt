@@ -24,7 +24,7 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
 
     private val movieListPresenter = MovieListPresenter(this)
     private val moviesList = mutableListOf<Movie>()
-    private var moviesAdapter: MoviesAdapter? = null
+    private lateinit  var moviesAdapter: MoviesAdapter
 
     private var pageNo = 1
 
@@ -104,8 +104,8 @@ class MovieListActivity : AppCompatActivity(), MovieListContract.View, ShowEmpty
             if (resultCode == RESULT_OK) {
                 fromReleaseFilter = data?.getStringExtra(KEY_RELEASE_FROM)!!
                 toReleaseFilter = data.getStringExtra(KEY_RELEASE_TO)!!
-                moviesAdapter?.setFilterParameter(fromReleaseFilter, toReleaseFilter)
-                moviesAdapter?.filter?.filter("")
+                moviesAdapter.setFilterParameter(fromReleaseFilter, toReleaseFilter)
+                moviesAdapter.filter?.filter("")
             }
         }
     }

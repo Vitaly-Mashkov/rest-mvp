@@ -85,11 +85,10 @@ class MoviesAdapter(private val movieListActivity: MovieListActivity,
     override fun getFilter(): Filter? {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence?): FilterResults? {
-                val filteredResults: List<Movie?>
-                if (fromDate.isEmpty() || toDate.isEmpty()) {
-                    filteredResults = movieList
+                val filteredResults: List<Movie?> = if (fromDate.isEmpty() || toDate.isEmpty()) {
+                    movieList
                 } else {
-                    filteredResults = getFilteredResults(fromDate, toDate)
+                    getFilteredResults(fromDate, toDate)
                 }
                 val results = FilterResults()
                 results.values = filteredResults

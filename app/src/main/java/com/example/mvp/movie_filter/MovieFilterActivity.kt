@@ -41,9 +41,8 @@ class MovieFilterActivity : AppCompatActivity() {
     private fun setListeners() {
         tv_from_date.setOnClickListener {
             val now = Calendar.getInstance()
-
             val dpd = DatePickerDialog(this, {
-                datePicker, year, month, dayOfMonth ->
+                    _, year, month, dayOfMonth ->
                 val date = year.toString() + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", dayOfMonth)
                         fromDate = date
                         tv_from_date.text = date
@@ -55,7 +54,7 @@ class MovieFilterActivity : AppCompatActivity() {
         tv_to_date.setOnClickListener {
             val now = Calendar.getInstance()
             val dpd = DatePickerDialog(this,
-                    {datePicker, year, monthOfYear, dayOfMonth ->
+                    { _, year, monthOfYear, dayOfMonth ->
                         val date = year.toString() + "-" + String.format("%02d", monthOfYear + 1) + "-" + String.format("%02d", dayOfMonth)
                         toDate = date
                         tv_to_date.text = date
